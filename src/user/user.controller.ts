@@ -61,17 +61,17 @@ const login = async (req: Request, res: Response) => {
 const getUsers = async (req: Request, res: Response) => {
 	try {
 		const sql_find_all = "SELECT * FROM users"
-		const users: ROW_TYPE[] = []
-		const allUsers = db.all(sql_find_all, [], (err: any, rows: USER_TABLE_TYPE) => {
+		let allUsers: USER_TABLE_TYPE = []
+        
+		db.all(sql_find_all, [], (err: any, rows: USER_TABLE_TYPE) => {
 			if (err) return console.error(err)
-			rows.forEach((row) => {
-				users.push(row)
-			})
+			allUsers = rows
+			
 		})
         
 		res
 			.status(200)
-			.send({message:"Success", users: users})
+			.send({ message:"Success", allUsers: allUsers })
         
 	} catch (err) {
 		console.error(err)
