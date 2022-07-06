@@ -21,7 +21,6 @@ db.run("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY NOT NULL, first_
 	return console.error(err)
 })
 
-
 // INSERT INTO TABLE
 const sql_insert = "INSERT INTO users(first_name, last_name, email, password) VALUES(?,?,?,?)"
 
