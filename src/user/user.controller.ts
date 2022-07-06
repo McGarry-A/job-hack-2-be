@@ -4,11 +4,12 @@ import db from "../../src/db/connection"
 import { ROW_TYPE, USER_TABLE_TYPE } from "./user.model"
 
 
+// THIS WORKS
 // req.body = user: ROW_TYPE
 const addUser = async (req: Request, res: Response) => {
 	try {
 		const sql_insert = "INSERT INTO users(first_name, last_name, email, password) VALUES(?,?,?,?)"
-		const newUser: ROW_TYPE = req.body 
+		const newUser: Pick<ROW_TYPE, "first_name" | "last_name" | "email" | "password"> = req.body 
 		const { first_name, last_name, email, password } = newUser
 
 		db.run(sql_insert,[first_name, last_name, email, password], (err: any) => {
@@ -27,7 +28,7 @@ const addUser = async (req: Request, res: Response) => {
 	}
 }
 
-// req.body = { email, password }
+// req.body = { email, password}
 const login = async (req: Request, res: Response) => {
 	try {
 		const { email, password } = req.body
@@ -55,31 +56,22 @@ const login = async (req: Request, res: Response) => {
 	}
 }
 
-// const updateUser = async (req: Request, res: Response) => {
-// 	try {
-
-// 	} catch (err) {
-// 		console.error(err)
-// 		res
-// 			.status(400)
-// 			.send({message: "error at function on server"})
-// 	}
-// }
-
-// req.body = {}
+// THIS DOESN'T WORK
+// req.body = {} 
 const getUsers = async (req: Request, res: Response) => {
 	try {
-		let allUsers: USER_TABLE_TYPE
 		const sql_find_all = "SELECT * FROM users"
-
-		db.all(sql_find_all, [], (err: any, rows: USER_TABLE_TYPE) => {
+		const users: ROW_TYPE[] = []
+		const allUsers = db.all(sql_find_all, [], (err: any, rows: USER_TABLE_TYPE) => {
 			if (err) return console.error(err)
-			allUsers = rows
+			rows.forEach((row) => {
+				users.push(row)
+			})
 		})
         
 		res
 			.status(200)
-			.send({message:"Success", allUsers})
+			.send({message:"Success", users: users})
         
 	} catch (err) {
 		console.error(err)
@@ -89,6 +81,7 @@ const getUsers = async (req: Request, res: Response) => {
 	}
 }
 
+// THIS WORKS
 // req.body = userId: number  
 const deleteUser = async (req: Request, res: Response) => {
 	try {
