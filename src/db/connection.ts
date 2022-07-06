@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const sqlite3 = require("sqlite3").verbose()
-
-type ROW_TYPE = {id: unknown, first_name: string, last_name: string, email: string, password: string }
+import { ROW_TYPE } from "../../src/user/user.model"
 
 // CONNECT TO THE DATABASE
 const db = new sqlite3.Database("./database.db", sqlite3.OPEN_READWRITE, (err: any) => {
@@ -38,3 +37,5 @@ db.all(sql_find_all, [], (err: any, rows: Array<ROW_TYPE>) => {
 		console.log(row)
 	})
 })
+
+export default db
