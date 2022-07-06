@@ -1,16 +1,19 @@
 import "./db/connection"
 
 import express, { Response, Express } from "express"
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const cors = require("cors")
+
 import userRouter from "./user/user.routes"
-import cors from "cors"
 
 const app: Express = express()
-const port = 5000
+const port = 5001
+  
 
 app
 	.use(express.json())
+	.use(cors())
 	.use(userRouter)
-	// .use(cors)
 
 app.get("/", (_, res: Response) => {
 	res
