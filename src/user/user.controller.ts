@@ -1,7 +1,7 @@
 // ALL USER METHODS LOGIN SIGN UP GET USERS UPDATE USER ETC
 import { Request, Response } from "express"
 import db from "../../src/db/connection"
-import { ROW_TYPE, USER_TABLE_TYPE } from "./user.model"
+import { ROW_TYPE, UserStateInterface, USER_TABLE_TYPE } from "./user.model"
 
 
 // THIS WORKS
@@ -37,10 +37,25 @@ const login = async (req: Request, res: Response) => {
         
 		db.all(sql_find, [email, password], (err: any, rows: Array<ROW_TYPE>) => {
 			if (err) return console.error(err)
+			const {first_name, last_name, email} = rows[0]
+
+			
+			const state: UserStateInterface = {
+				isLoggedIn: true,
+				user: {
+					firstName: first_name,
+					lastName: last_name,
+					email: email
+				},
+				savedJobs: {
+					likedJobs: [],
+					appliedJobs: []
+				}
+			}
 
 			res
 				.status(200)
-				.send({message: "Success", user: rows[0]})
+				.send({message: "Success", user: state})
 		})
 	} catch (err) {
 		console.error(err)
