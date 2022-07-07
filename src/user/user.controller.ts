@@ -37,7 +37,7 @@ const login = async (req: Request, res: Response) => {
         
 		db.all(sql_find, [email, password], (err: any, rows: Array<ROW_TYPE>) => {
 			if (err) return console.error(err)
-			const {first_name, last_name, email} = rows[0]
+			const {first_name, last_name, email, liked, applied} = rows[0]
 
 			
 			const state: UserStateInterface = {
@@ -48,8 +48,8 @@ const login = async (req: Request, res: Response) => {
 					email: email
 				},
 				savedJobs: {
-					likedJobs: [],
-					appliedJobs: []
+					likedJobs: liked,
+					appliedJobs: applied
 				}
 			}
 

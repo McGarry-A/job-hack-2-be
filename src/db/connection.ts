@@ -11,7 +11,7 @@ const db = new sqlite3.Database("./database.db", sqlite3.OPEN_READWRITE, (err: a
 
 
 // CREATE A TABLE IF THERE ISN'T ALREADY ONE
-db.run("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY NOT NULL, first_name, last_name, email UNIQUE, password)", (err: any) => {
+db.run("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY NOT NULL, first_name NOT NULL, last_name NOT NULL, email NOT NULL UNIQUE, password NOT NULL, liked, applied)", (err: any) => {
 	if (err) return console.error(err)
 	console.log("Table created or already exists")
 })

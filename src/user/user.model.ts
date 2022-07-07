@@ -4,7 +4,9 @@ type ROW_TYPE = {
     first_name: string, 
     last_name: string, 
     email: string, 
-    password: string 
+    password: string, 
+    liked: Array<JobType>,
+    applied: Array<JobType>  
 }
 
 type USER_TABLE_TYPE = ROW_TYPE[]
@@ -16,6 +18,7 @@ export type JobType = {
     company: string;
     salary: number;
     location: string;
+    description: string;
 }
 
 export interface UserStateInterface {
