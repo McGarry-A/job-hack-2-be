@@ -9,8 +9,8 @@ import { ROW_TYPE, USER_TABLE_TYPE } from "./user.model"
 const addUser = async (req: Request, res: Response) => {
 	try {
 		const sql_insert = "INSERT INTO users(first_name, last_name, email, password) VALUES(?,?,?,?)"
-		const newUser: Pick<ROW_TYPE, "first_name" | "last_name" | "email" | "password"> = req.body 
-		const { first_name, last_name, email, password } = newUser
+		const newUser: Pick<ROW_TYPE, "first_name" | "last_name" | "email" | "password"> = req.body
+		const { first_name, last_name, email, password } =  req.body 
 
 		db.run(sql_insert,[first_name, last_name, email, password], (err: any) => {
 			if (err) return console.error(err)
@@ -19,7 +19,7 @@ const addUser = async (req: Request, res: Response) => {
 
 		res
 			.status(200)
-			.send({message: "Success", newUser})
+			.send({ message: "Success", newUser })
 	} catch (err) {
 		console.error(err)
 		res
@@ -32,22 +32,16 @@ const addUser = async (req: Request, res: Response) => {
 const login = async (req: Request, res: Response) => {
 	try {
 		const { email, password } = req.body
-		const sql_find_all = "SELECT * FROM users"
-		let user: ROW_TYPE = null
+		console.log(email, password)
+		const sql_find = "SELECT * FROM users WHERE email = (?) AND password = (?)"
         
-		db.all(sql_find_all, [], (err: any, rows: Array<ROW_TYPE>) => {
+		db.all(sql_find, [email, password], (err: any, rows: Array<ROW_TYPE>) => {
 			if (err) return console.error(err)
-			rows.forEach((row: ROW_TYPE) => {
-				if (email === row.email && password === row.password) {
-					user = row
-				}
-			})
+
+			res
+				.status(200)
+				.send({message: "Success", user: rows[0]})
 		})
-
-		res
-			.status(200)
-			.send({message: "Succeess", user})
-
 	} catch (err) {
 		console.error(err)
 		res
@@ -56,8 +50,6 @@ const login = async (req: Request, res: Response) => {
 	}
 }
 
-// THIS DOESN'T WORK
-// req.body = {} 
 const getUsers = async (req: Request, res: Response) => {
 	try {
 		const sql_find_all = "SELECT * FROM users"

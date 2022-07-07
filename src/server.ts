@@ -1,8 +1,7 @@
 import "./db/connection"
 
 import express, { Response, Express } from "express"
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const cors = require("cors")
+import cors from "cors"
 
 import userRouter from "./user/user.routes"
 

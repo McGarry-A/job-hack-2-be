@@ -1,4 +1,4 @@
-# job-hack-2-backend
-# job-hack-2-backend
-# job-hack-2-backend
-# job-hack-2-be
+To Do List: 
+
+> Implement JWT's
+> Password should be hashed in the middleware & compared with the password on the DB
