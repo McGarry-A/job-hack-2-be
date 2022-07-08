@@ -7,6 +7,9 @@ type ROW_TYPE = {
     password: string, 
     liked: Array<JobType>,
     applied: Array<JobType>  
+    interview: Array<JobType>  
+    rejected: Array<JobType>  
+    accepted: Array<JobType>  
 }
 
 type USER_TABLE_TYPE = ROW_TYPE[]
@@ -31,5 +34,8 @@ export interface UserStateInterface {
     savedJobs: {
         likedJobs: JobType[]
         appliedJobs: JobType[]
+        interviewJobs: JobType[]
+        acceptedJobs: JobType[]
+        rejectedJobs: JobType[]
     }
 }
