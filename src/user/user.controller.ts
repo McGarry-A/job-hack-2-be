@@ -117,7 +117,15 @@ const deleteUser = async (req: Request, res: Response) => {
 
 const editUser = () => {
 	try {
+		const sql_update_statement = 
+			"UPDATE users SET first_name = (?), last_name = (?), email = (?), password = (?) WHERE email = (?)"
+
+		db.run(sql_update_statement, [], (err: any, rows: USER_TABLE_TYPE) => {
+			if (err) return console.error(err)
+		})
+
 		console.log("edit user")
+		
 	} catch (error) {
 		console.error(error)
 	}
