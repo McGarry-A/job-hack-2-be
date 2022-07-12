@@ -115,4 +115,12 @@ const deleteUser = async (req: Request, res: Response) => {
 	}
 }
 
-export { addUser, login, getUsers, deleteUser }
+const editUser = () => {
+	try {
+		console.log("edit user")
+	} catch (error) {
+		console.error(error)
+	}
+}
+
+export { addUser, login, getUsers, deleteUser, editUser }
