@@ -115,19 +115,30 @@ const deleteUser = async (req: Request, res: Response) => {
 	}
 }
 
-const editUser = () => {
+const editUser = async (req: Request, res: Response) => {
 	try {
+		const {newUser: { firstName, lastName, email, password }} = req.body 
+		const {user: { email: originalEmail }} = req.body
+
 		const sql_update_statement = 
 			"UPDATE users SET first_name = (?), last_name = (?), email = (?), password = (?) WHERE email = (?)"
 
-		db.run(sql_update_statement, [], (err: any, rows: USER_TABLE_TYPE) => {
+		db.run(sql_update_statement, [firstName, lastName, email, password, originalEmail], (err: any, rows: ROW_TYPE) => {
 			if (err) return console.error(err)
+
+			console.log(rows)
+			res
+				.status(200)
+				.send({ user: req.body.newUser, message: "Successfully updated user." })
 		})
 
 		console.log("edit user")
-		
+
 	} catch (error) {
 		console.error(error)
+		res
+			.status(400)
+			.send({message: "unable to update user at the server"})
 	}
 }
 
