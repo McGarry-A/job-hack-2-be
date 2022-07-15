@@ -3,10 +3,10 @@ import { addUser, login, getUsers, deleteUser, editUser } from "./user.controlle
 
 const userRouter = Router()
 
-userRouter.post("/user", addUser)
-userRouter.post("/login", login) //Should compare passwords on server side
+userRouter.post("/user", addUser) // DONE JUST NEED TO LOG IN NOW
+userRouter.post("/login", login) // DONE
 userRouter.get("/user", getUsers)
 userRouter.put("/user", editUser)
-userRouter.delete("/user/:id", deleteUser)
+userRouter.delete("/user/:id", deleteUser) // EVERY USER NEEDS AN ID
 
 export default userRouter
