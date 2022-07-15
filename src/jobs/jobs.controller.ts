@@ -1,22 +1,20 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import axios from "axios"
 import { Request, Response } from "express"
-import { JobInterface, ReedJobInterface, ReedJobProfileInterface } from "./jobs.model"
+import { JobInterface, ReedJobInterface } from "./jobs.model"
 
 const getReedJobs = async (req: Request, res: Response) => {
 	try {
-		// Need to make dynamic
-		// const title = req.query["title"]
-		// const location = req.query["location"]
-		// const page = req.query["page"]
+		const title = req.query["title"]
+		const location = req.query["location"]
+		const page = req.query["page"]
 
-		// console.log(title, page, location)
+		console.log(title, page, location)
 
 		const options = {
 			method: "GET",
 			url: "https://www.reed.co.uk/api/1.0/search",
-			//	params: {keywords: title, locationName: location, resultsToTake: 10, resultsToSKip: Number(page) * 10 },
-			params: { keywords: "developer", locationName: "Manchester", resultsToTake: 10 },
+			params: { keywords: title, locationName: location, resultsToTake: 10, resultsToSkip: Number(page) * 10 },
 			headers: {
 				cookie: "__cfruid=db44e3128c19837029ab9f8db916b74c36e8e95f-1657527229",
 				Authorization: "Basic YjYwZGRmM2VkYzRjNDBmNWE4NjZiNmUzZDkxY2UyY2Q6"

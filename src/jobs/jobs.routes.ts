@@ -5,6 +5,6 @@ const jobsRouter = Router()
 
 jobsRouter.get("/reed", getReedJobs)
 jobsRouter.get("/adzuna", getAdzunaJobs)
-jobsRouter.get("/user/:id", getReedJob)
+jobsRouter.get("/reed/:id", getReedJob)
 
 export default jobsRouter
