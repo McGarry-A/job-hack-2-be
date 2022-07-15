@@ -1,10 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import axios from "axios"
 import { Request, Response } from "express"
-import { AdzunaResponseInterface, ReedResponseInterface } from "./jobs.model"
+import { JobInterface, ReedJobInterface } from "./jobs.model"
 
 const getReedJobs = async (req: Request, res: Response) => {
 	try {
+		// Need to make dynamic
 		const options = {
 			method: "GET",
 			url: "https://www.reed.co.uk/api/1.0/search",
@@ -16,11 +17,25 @@ const getReedJobs = async (req: Request, res: Response) => {
 		}
 
 		const response = await axios.request(options)
-		const data: ReedResponseInterface = await response.data
+		const data = await response.data
 		
+		const responseJobsArray: ReedJobInterface[] = data.jobs.results
+		const jobsArray: JobInterface[] = responseJobsArray.map(el => {
+			return { 
+				id: el.jobId, 
+				title: el.jobTitle, 
+				location: el.locationName, 
+				description: el.jobDescription, 
+				salary: el.maximumSalary, 
+				company: el.employerName, 
+				url: el.jobUrl, 
+				contract: null 
+			}
+		})
+
 		res
 			.status(200)
-			.send({message: "Success", jobs: data})
+			.send({message: "Success", jobs: jobsArray})
 
 	} catch (error) {
 		console.error(error)

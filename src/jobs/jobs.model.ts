@@ -8,7 +8,7 @@ export interface JobInterface {
   company: string;
   contract: string;
   url: string;
-  id:string;
+  id: number;
 }
 
 // ADZUNA 
