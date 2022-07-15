@@ -6,10 +6,17 @@ import { JobInterface, ReedJobInterface } from "./jobs.model"
 const getReedJobs = async (req: Request, res: Response) => {
 	try {
 		// Need to make dynamic
+		// const title = req.query["title"]
+		// const location = req.query["location"]
+		// const page = req.query["page"]
+
+		// console.log(title, page, location)
+
 		const options = {
 			method: "GET",
 			url: "https://www.reed.co.uk/api/1.0/search",
-			params: {keywords: "accountant", locationName: "london"},
+			//	params: {keywords: title, locationName: location, resultsToTake: 10, resultsToSKip: Number(page) * 10 },
+			params: { keywords: "developer", locationName: "Manchester"},
 			headers: {
 				cookie: "__cfruid=db44e3128c19837029ab9f8db916b74c36e8e95f-1657527229",
 				Authorization: "Basic YjYwZGRmM2VkYzRjNDBmNWE4NjZiNmUzZDkxY2UyY2Q6"
@@ -17,10 +24,9 @@ const getReedJobs = async (req: Request, res: Response) => {
 		}
 
 		const response = await axios.request(options)
-		const data = await response.data
-		
-		const responseJobsArray: ReedJobInterface[] = data.jobs.results
-		const jobsArray: JobInterface[] = responseJobsArray.map(el => {
+		const data = await response.data.results
+
+		const jobsArray: JobInterface[] = data.map((el: Omit<ReedJobInterface, "contract">) => {
 			return { 
 				id: el.jobId, 
 				title: el.jobTitle, 
@@ -29,13 +35,15 @@ const getReedJobs = async (req: Request, res: Response) => {
 				salary: el.maximumSalary, 
 				company: el.employerName, 
 				url: el.jobUrl, 
-				contract: null 
 			}
 		})
 
+		console.log(jobsArray)
 		res
 			.status(200)
 			.send({message: "Success", jobs: jobsArray})
+
+		
 
 	} catch (error) {
 		console.error(error)

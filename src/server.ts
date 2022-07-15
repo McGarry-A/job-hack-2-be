@@ -8,7 +8,6 @@ import jobsRouter from "./jobs/jobs.routes"
 
 const app: Express = express()
 const port = 5001
-  
 
 app
 	.use(express.json())
