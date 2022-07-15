@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.getUsers = exports.login = exports.addUser = void 0;
+exports.editUser = exports.deleteUser = exports.getUsers = exports.login = exports.addUser = void 0;
 const connection_1 = __importDefault(require("../../src/db/connection"));
 // THIS WORKS
 // req.body = user: ROW_TYPE
@@ -47,7 +47,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         connection_1.default.all(sql_find, [email, password], (err, rows) => {
             if (err)
                 return console.error(err);
-            const { first_name, last_name, email, liked, applied } = rows[0];
+            const { first_name, last_name, email, liked, applied, interview, accepted, rejected } = rows[0];
             const state = {
                 isLoggedIn: true,
                 user: {
@@ -57,7 +57,10 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 },
                 savedJobs: {
                     likedJobs: liked,
-                    appliedJobs: applied
+                    appliedJobs: applied,
+                    interviewJobs: interview,
+                    acceptedJobs: accepted,
+                    rejectedJobs: rejected
                 }
             };
             res
@@ -117,4 +120,27 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deleteUser = deleteUser;
+const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { newUser: { firstName, lastName, email, password } } = req.body;
+        const { user: { email: originalEmail } } = req.body;
+        const sql_update_statement = "UPDATE users SET first_name = (?), last_name = (?), email = (?), password = (?) WHERE email = (?)";
+        connection_1.default.run(sql_update_statement, [firstName, lastName, email, password, originalEmail], (err, rows) => {
+            if (err)
+                return console.error(err);
+            console.log(rows);
+            res
+                .status(200)
+                .send({ user: req.body.newUser, message: "Successfully updated user." });
+        });
+        console.log("edit user");
+    }
+    catch (error) {
+        console.error(error);
+        res
+            .status(400)
+            .send({ message: "unable to update user at the server" });
+    }
+});
+exports.editUser = editUser;
 //# sourceMappingURL=user.controller.js.map
