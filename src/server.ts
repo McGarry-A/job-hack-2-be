@@ -21,4 +21,10 @@ app.get("/", (_, res: Response) => {
 		.send({ message: "home route" })
 })
 
+app.get("/api", (_, res: Response) => {
+	res
+		.status(200)
+		.send({ message: "success" })
+})
+
 app.listen(port, () => console.log(`Running on port ${port}`))

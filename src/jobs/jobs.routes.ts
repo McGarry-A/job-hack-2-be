@@ -3,8 +3,8 @@ import { getAdzunaJobs, getReedJob, getReedJobs } from "./jobs.controller"
 
 const jobsRouter = Router()
 
-jobsRouter.get("/reed", getReedJobs)
-jobsRouter.get("/adzuna", getAdzunaJobs)
-jobsRouter.get("/reed/:id", getReedJob)
+jobsRouter.get("api/reed", getReedJobs)
+jobsRouter.get("api/adzuna", getAdzunaJobs)
+jobsRouter.get("api/reed/:id", getReedJob)
 
 export default jobsRouter
