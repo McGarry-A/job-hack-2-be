@@ -1,6 +1,6 @@
 // ALL USER METHODS LOGIN SIGN UP GET USERS UPDATE USER ETC
 import { Request, Response } from "express"
-import db from "../../src/db/connection"
+import db from "../db/connection"
 import { ROW_TYPE, UserStateInterface, USER_TABLE_TYPE } from "./user.model"
 
 

@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 import axios from "axios"
 import { Request, Response } from "express"
 import { JobInterface, ReedJobInterface } from "./jobs.model"
