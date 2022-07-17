@@ -77,11 +77,12 @@ const getReedJob = async (req: Request, res: Response) => {
 const getReedCompanyJobs = async (req: Request, res: Response) => {
 	try {
 		const employerId = req.params.id
-		console.log(employerId)
+		const page = req.query["page"]
+
 		const options = {
 			method: "GET",
 			url: `https://www.reed.co.uk/api/1.0/search?employerId=${employerId}`,
-			params:{ resultsToTake: 5 },
+			params:{ resultsToTake: 5 * Number(page) },
 			headers: {
 				cookie: ".ASPXANONYMOUS=B8oQanJRqQFJdTzZfBfg1l1IMu60z-qtuK13d_QcOnDGzKpBSQ3zWsXUmMJhqsnuIuGPoa6zCQN-86Xv7rKxYsfzk5-48NaUCRGcaxq3Vl4VlQaLQhNnTQTfz_I3cg6MQ-iOBw2; __cf_bm=Cix1RGiNak.7JsGfZTu3nYnWfDP3k09TAjNt6oN5f1A-1657906191-0-AS29qEn3CXkzBWwK40Cbls4Qv148xDmVGYKa7k5bqz%2B2COIkFfq3KivfFhtkDAO8N%2FAtSTr5VwONJfSIQaHabfw%3D; __cfruid=04ece7d581ff83ac86083e15867d8af238e9efad-1657404103",
 				Authorization: "Basic YjYwZGRmM2UtZGM0Yy00MGY1LWE4NjYtYjZlM2Q5MWNlMmNkOg=="
