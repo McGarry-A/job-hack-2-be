@@ -8,8 +8,6 @@ const getReedJobs = async (req: Request, res: Response) => {
 		const location = req.query["location"]
 		const page = req.query["page"]
 
-		console.log(title, page, location)
-
 		const options = {
 			method: "GET",
 			url: "https://www.reed.co.uk/api/1.0/search",
@@ -76,6 +74,48 @@ const getReedJob = async (req: Request, res: Response) => {
 	}
 }
 
+const getReedCompanyJobs = async (req: Request, res: Response) => {
+	try {
+		const employerId = req.params.id
+		const page = req.query["page"]
+
+		const options = {
+			method: "GET",
+			url: `https://www.reed.co.uk/api/1.0/search?employerId=${employerId}`,
+			params:{ resultsToTake: 5 * Number(page) },
+			headers: {
+				cookie: ".ASPXANONYMOUS=B8oQanJRqQFJdTzZfBfg1l1IMu60z-qtuK13d_QcOnDGzKpBSQ3zWsXUmMJhqsnuIuGPoa6zCQN-86Xv7rKxYsfzk5-48NaUCRGcaxq3Vl4VlQaLQhNnTQTfz_I3cg6MQ-iOBw2; __cf_bm=Cix1RGiNak.7JsGfZTu3nYnWfDP3k09TAjNt6oN5f1A-1657906191-0-AS29qEn3CXkzBWwK40Cbls4Qv148xDmVGYKa7k5bqz%2B2COIkFfq3KivfFhtkDAO8N%2FAtSTr5VwONJfSIQaHabfw%3D; __cfruid=04ece7d581ff83ac86083e15867d8af238e9efad-1657404103",
+				Authorization: "Basic YjYwZGRmM2UtZGM0Yy00MGY1LWE4NjYtYjZlM2Q5MWNlMmNkOg=="
+			}
+		}
+		
+		const response = await axios.request(options)
+		const data = await response.data.results
+
+		const companyJobsArray: JobInterface[] = data.map((el: Omit<ReedJobInterface, "contract">) => {
+			return { 
+				id: el.jobId, 
+				title: el.jobTitle, 
+				location: el.locationName, 
+				description: el.jobDescription, 
+				salary: el.maximumSalary, 
+				company: el.employerName, 
+				url: el.jobUrl, 
+			}
+		})
+
+		res
+			.status(200)
+			.send({message: "Success", jobs: companyJobsArray})
+
+	} catch (error) {
+		console.error(error)
+		res
+			.status(400)
+			.send({message: "Error"})
+	}
+}
+
 const getAdzunaJobs = async (req: Request, res: Response) => {
 	try {
 
@@ -114,4 +154,4 @@ const getAdzunaJobs = async (req: Request, res: Response) => {
 	}
 }
 
-export { getReedJobs, getReedJob, getAdzunaJobs }
+export { getReedJobs, getReedJob, getReedCompanyJobs, getAdzunaJobs }
