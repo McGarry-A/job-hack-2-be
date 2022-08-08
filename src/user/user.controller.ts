@@ -1,15 +1,14 @@
 // ALL USER METHODS LOGIN SIGN UP GET USERS UPDATE USER ETC
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import db from "../db/connection"
 import { ROW_TYPE, UserStateInterface, USER_TABLE_TYPE } from "./user.model"
 
 
 // THIS WORKS
 // req.body = user: ROW_TYPE
-const addUser = async (req: Request, res: Response) => {
+const addUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const sql_insert = "INSERT INTO users(first_name, last_name, email, password) VALUES(?,?,?,?)"
-		const newUser: Pick<ROW_TYPE, "first_name" | "last_name" | "email" | "password"> = req.body
 		const { first_name, last_name, email, password } =  req.body 
 
 		db.run(sql_insert,[first_name, last_name, email, password], (err: any) => {
@@ -17,9 +16,10 @@ const addUser = async (req: Request, res: Response) => {
 			console.log("a new row has been created")
 		})
 
-		res
-			.status(200)
-			.send({ message: "Success", newUser })
+		// res
+		// 	.status(200)
+		// 	.send({ message: "Success", newUser })
+		next()
 	} catch (err) {
 		console.error(err)
 		res
