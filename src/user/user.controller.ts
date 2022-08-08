@@ -16,10 +16,13 @@ const addUser = async (req: Request, res: Response, next: NextFunction) => {
 			console.log("a new row has been created")
 		})
 
-		// res
-		// 	.status(200)
-		// 	.send({ message: "Success", newUser })
-		next()
+		
+		res
+			.status(200)
+			.send({ message: "Success" })
+
+		// next?
+		
 	} catch (err) {
 		console.error(err)
 		res
