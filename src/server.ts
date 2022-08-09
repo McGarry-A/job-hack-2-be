@@ -10,15 +10,10 @@ const app: Express = express()
 const port = process.env.PORT || 5001
 
 app
-	.use(express.json())
 	.use(cors({
 		origin: "http://localhost:3000"
 	}))
-	.use(function(req, res, next) {
-		res.header("Access-Control-Allow-Origin", "*")
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-		next()
-	})
+	.use(express.json())
 	.use(userRouter)
 	.use(jobsRouter)
 
