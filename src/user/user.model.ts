@@ -5,11 +5,7 @@ type ROW_TYPE = {
     last_name: string, 
     email: string, 
     password: string, 
-    liked: Array<JobType>,
-    applied: Array<JobType>  
-    interview: Array<JobType>  
-    rejected: Array<JobType>  
-    accepted: Array<JobType>  
+    saved_jobs: savedJobsInterface
 }
 
 type USER_TABLE_TYPE = ROW_TYPE[]
@@ -31,11 +27,24 @@ export interface UserStateInterface {
         lastName: string;
         email: string;
     }
-    savedJobs: {
-        likedJobs: JobType[]
-        appliedJobs: JobType[]
-        interviewJobs: JobType[]
-        acceptedJobs: JobType[]
-        rejectedJobs: JobType[]
-    }
+    savedJobs: savedJobsInterface
+}
+
+interface savedJobsInterface {
+    columnOrder: string[],
+        jobs: {
+            [key: string]: {
+                id: string;
+                title: string;
+                company: string;
+                link: string
+            }
+        },
+        columns: {
+            [key: string]: {
+                id: string,
+                title: string,
+                jobIds: string[]
+            }
+        }
 }

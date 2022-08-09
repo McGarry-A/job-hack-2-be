@@ -1,12 +1,12 @@
 // ALL USER METHODS LOGIN SIGN UP GET USERS UPDATE USER ETC
-import { NextFunction, Request, Response } from "express"
 import db from "../db/connection"
+import { Request, Response } from "express"
 import { ROW_TYPE, UserStateInterface, USER_TABLE_TYPE } from "./user.model"
 
 
 // THIS WORKS
 // req.body = user: ROW_TYPE
-const addUser = async (req: Request, res: Response, next: NextFunction) => {
+const addUser = async (req: Request, res: Response) => {
 	try {
 		const sql_insert = "INSERT INTO users(first_name, last_name, email, password, saved_jobs) VALUES(?,?,?,?)"
 		const { first_name, last_name, email, password } =  req.body
@@ -59,7 +59,7 @@ const login = async (req: Request, res: Response) => {
         
 		db.all(sql_find, [email, password], (err: any, rows: Array<ROW_TYPE>) => {
 			if (err) return console.error(err)
-			const {first_name, last_name, email, liked, applied, interview, accepted, rejected} = rows[0]
+			const {first_name, last_name, email, saved_jobs } = rows[0]
 
 			
 			const state: UserStateInterface = {
@@ -69,13 +69,7 @@ const login = async (req: Request, res: Response) => {
 					lastName: last_name,
 					email: email
 				},
-				savedJobs: {
-					likedJobs: liked,
-					appliedJobs: applied,
-					interviewJobs: interview,
-					acceptedJobs: accepted,
-					rejectedJobs: rejected
-				}
+				savedJobs: saved_jobs
 			}
 
 			res
