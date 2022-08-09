@@ -11,7 +11,9 @@ const port = process.env.PORT || 5001
 
 app
 	.use(express.json())
-	.use(cors())
+	.use(cors({
+		origin: "*"
+	}))
 	.use(userRouter)
 	.use(jobsRouter)
 
