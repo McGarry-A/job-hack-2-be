@@ -12,7 +12,7 @@ const port = process.env.PORT || 5001
 app
 	.use(express.json())
 	.use(cors({
-		origin: "*"
+		origin: "http://localhost:3000"
 	}))
 	.use(userRouter)
 	.use(jobsRouter)
