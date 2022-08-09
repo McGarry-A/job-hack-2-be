@@ -8,7 +8,7 @@ import { ROW_TYPE, UserStateInterface, USER_TABLE_TYPE } from "./user.model"
 // req.body = user: ROW_TYPE
 const addUser = async (req: Request, res: Response) => {
 	try {
-		const sql_insert = "INSERT INTO users(first_name, last_name, email, password, saved_jobs) VALUES(?,?,?,?)"
+		const sql_insert = "INSERT INTO users(first_name, last_name, email, password, saved_jobs) VALUES(?,?,?,?,?)"
 		const { first_name, last_name, email, password } =  req.body
 		
 		const savedJobs = {
@@ -30,7 +30,7 @@ const addUser = async (req: Request, res: Response) => {
 			}
 		} 
 
-		db.run(sql_insert,[first_name, last_name, email, password, savedJobs], (err: any) => {
+		db.run(sql_insert,[first_name, last_name, email, password, JSON.stringify(savedJobs)], (err: any) => {
 			if (err) return console.error(err)
 			console.log("a new row has been created")
 		})

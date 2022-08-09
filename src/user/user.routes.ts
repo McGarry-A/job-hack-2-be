@@ -4,7 +4,7 @@ import { addUser, login, getUsers, deleteUser, editUser } from "./user.controlle
 
 const userRouter = Router()
 
-userRouter.post("/api/user", addUser, login) // DONE JUST NEED TO LOG IN NOW
+userRouter.post("/api/user", addUser) // DONE JUST NEED TO LOG IN NOW
 userRouter.post("/api/login", login) // DONE
 // userRouter.post("/api/google-auth", googleLogin, googleSignUp)
 userRouter.get("/api/user", getUsers)

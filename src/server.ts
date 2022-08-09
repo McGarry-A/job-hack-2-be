@@ -10,11 +10,6 @@ const app: Express = express()
 const port = process.env.PORT || 5001
 
 app
-	.all("*", function (req, res) {
-		res.header("Access-Control-Allow-Origin", "*")
-		res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With")
-		res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
-	})
 	.use(cors())
 	.use(express.json())
 	.use(userRouter)
