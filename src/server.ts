@@ -11,9 +11,6 @@ const port = process.env.PORT || 5001
 
 app
 	.options("*", cors())
-	.use(cors({
-		origin: "https://job-hack-2-frontend.vercel.app"
-	}))
 	.use(express.json())
 	.use(userRouter)
 	.use(jobsRouter)
