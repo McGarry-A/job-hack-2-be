@@ -10,7 +10,7 @@ const app: Express = express()
 const port = process.env.PORT || 5001
 
 app
-	.options("*", cors())
+	.use(cors())
 	.use(express.json())
 	.use(userRouter)
 	.use(jobsRouter)
