@@ -59,6 +59,8 @@ const login = async (req: Request, res: Response) => {
         
 		db.all(sql_find, [email, password], (err: any, rows: Array<ROW_TYPE>) => {
 			if (err) return console.error(err)
+			console.log(JSON.stringify(rows))
+			if (!rows.length) return console.error("No users found")
 			const {first_name, last_name, email, saved_jobs } = rows[0]
 
 			
