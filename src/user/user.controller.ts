@@ -160,4 +160,26 @@ const editUser = async (req: Request, res: Response) => {
 	}
 }
 
-export { addUser, login, getUsers, deleteUser, editUser }
+const updateUserJobs = async (req: Request, res: Response) => {
+	try {
+		const sql_find = "UPDATE users SET saved_jobs = (?) WHERE email = (?)"
+		const { email, newJobs } = req.body
+
+		console.log(email)
+
+		db.all(sql_find, [JSON.stringify(newJobs), email], (err: any) => {
+			if (err) return console.error("No users found with that email")
+			
+			console.log("Updated Jobs")
+
+			res
+				.status(200)
+				.send(true)
+		})
+
+	} catch (error) {
+		res.status(500).send({ status: false })
+	}
+}
+
+export { addUser, login, getUsers, deleteUser, editUser, updateUserJobs }
