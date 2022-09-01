@@ -10,6 +10,6 @@ userRouter.post("/api/login", login) // DONE
 userRouter.get("/api/user", getUsers)
 userRouter.put("/api/user", editUser)
 userRouter.post("/api/jobs", updateUserJobs)
-userRouter.delete("/api/user/:id", deleteUser) // EVERY USER NEEDS AN ID
+userRouter.delete("/api/user", deleteUser) // EVERY USER NEEDS AN ID
 
 export default userRouter

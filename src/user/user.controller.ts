@@ -35,10 +35,20 @@ const addUser = async (req: Request, res: Response) => {
 			console.log("a new row has been created")
 		})
 
+		const state: UserStateInterface = {
+			isLoggedIn: true,
+			user: {
+				firstName: first_name,
+				lastName: last_name,
+				email: email
+			},
+			savedJobs: savedJobs
+		}
+
 		
 		res
 			.status(200)
-			.send({ message: "Success" })
+			.send({ message: "Success", user: state })
 
 		// next?
 		
@@ -113,23 +123,26 @@ const getUsers = async (req: Request, res: Response) => {
 // req.body = userId: number  
 const deleteUser = async (req: Request, res: Response) => {
 	try {
-		const userIdToDelete = Number(req.params.id)
-		const sql_to_delete = "DELETE FROM users WHERE id=(?)"
+		const { email } = req.body
 
-		db.run(sql_to_delete, userIdToDelete, (err: any) => {
+		console.log(email)
+		
+		const sql_to_delete = "DELETE FROM users WHERE email=(?)"
+
+		db.run(sql_to_delete, email, (err: any) => {
 			if (err) return console.error(err)
 			console.log("Successfully deleted")
 		})
 
 		res
 			.status(200)
-			.send({message: "Sucessfully delete", id: userIdToDelete})
+			.send(true)
 
 	} catch (err) {
 		console.error(err)
 		res
 			.status(400)
-			.send({message: "error at function on server"})
+			.send(false)
 	}
 }
 
@@ -164,6 +177,8 @@ const updateUserJobs = async (req: Request, res: Response) => {
 	try {
 		const sql_find = "UPDATE users SET saved_jobs = (?) WHERE email = (?)"
 		const { email, newJobs } = req.body
+
+		console.log("HIT")
 
 		console.log(email)
 
