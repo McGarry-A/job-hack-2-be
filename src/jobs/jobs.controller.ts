@@ -1,12 +1,15 @@
 import axios from "axios"
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { JobInterface, ReedJobInterface } from "./jobs.model"
+import sortAlpha from "./utils/sortAlpha"
+import sortSalary from "./utils/sortSalary"
 
-const getReedJobs = async (req: Request, res: Response) => {
+const getReedJobs = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const title = req.query["title"]
 		const location = req.query["location"]
 		const page = req.query["page"]
+		const sort = req.query["sort"]
 
 		const options = {
 			method: "GET",
@@ -33,9 +36,20 @@ const getReedJobs = async (req: Request, res: Response) => {
 			}
 		})
 
-		res
-			.status(200)
-			.send({message: "Success", jobs: jobsArray})
+		if (!sort) {	
+			return res
+				.status(200)
+				.send({message: "Success", jobs: jobsArray})
+		}
+
+		if (sort) {
+			console.log("sending to sort")
+			const dataToSort = { jobsArray, sort }
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			//@ts-ignore
+			req.dataToSort = { ...dataToSort }
+			next()
+		}
 
 	} catch (error) {
 		console.error(error)
@@ -154,4 +168,27 @@ const getAdzunaJobs = async (req: Request, res: Response) => {
 	}
 }
 
-export { getReedJobs, getReedJob, getReedCompanyJobs, getAdzunaJobs }
+const handleSort = (req: Request, res: Response) => {
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	console.log(req.dataToSort)
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	const { sort, jobsArray } = req.dataToSort
+	let sortedJobs
+	switch (sort) {
+	case "sort_alpha":
+		sortedJobs = sortAlpha(jobsArray)
+		return res.status(200).send({ message: "success", jobs: sortedJobs })
+	case "sort_ascending":
+		sortedJobs = sortSalary("ascending", jobsArray)
+		return res.status(200).send({ message: "success", jobs: sortedJobs })
+	case "sort_decsending":
+		sortedJobs = sortSalary("descending", jobsArray)
+		return res.status(200).send({ message: "success", jobs: sortedJobs })
+	default:
+		return res.status(200).send({ message: "success", jobs: jobsArray})
+	}
+}
+
+export { getReedJobs, getReedJob, getReedCompanyJobs, getAdzunaJobs, handleSort }

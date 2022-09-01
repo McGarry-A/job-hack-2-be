@@ -70,7 +70,7 @@ const login = async (req: Request, res: Response) => {
 		db.all(sql_find, [email, password], (err: any, rows: Array<ROW_TYPE>) => {
 			if (err) return console.error(err)
 			console.log(JSON.stringify(rows))
-			if (!rows.length) return console.error("No users found")
+			if (!rows.length) return res.status(401).send(false)
 			const {first_name, last_name, email, saved_jobs } = rows[0]
 
 			
@@ -126,7 +126,7 @@ const deleteUser = async (req: Request, res: Response) => {
 		const { email } = req.body
 
 		console.log(email)
-		
+
 		const sql_to_delete = "DELETE FROM users WHERE email=(?)"
 
 		db.run(sql_to_delete, email, (err: any) => {
