@@ -14,7 +14,7 @@ const getReedJobs = async (req: Request, res: Response, next: NextFunction) => {
 		const options = {
 			method: "GET",
 			url: "https://www.reed.co.uk/api/1.0/search",
-			params: { keywords: title, locationName: location, resultsToTake: 10, resultsToSkip: Number(page) * 10 },
+			params: { keywords: title, locationName: location, resultsToTake: 100, resultsToSkip: Number(page) * 10 },
 			headers: {
 				cookie: "__cfruid=db44e3128c19837029ab9f8db916b74c36e8e95f-1657527229",
 				Authorization: "Basic YjYwZGRmM2VkYzRjNDBmNWE4NjZiNmUzZDkxY2UyY2Q6"
@@ -171,20 +171,19 @@ const getAdzunaJobs = async (req: Request, res: Response) => {
 const handleSort = (req: Request, res: Response) => {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	console.log(req.dataToSort)
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	const { sort, jobsArray } = req.dataToSort
+
 	let sortedJobs
+	
 	switch (sort) {
 	case "sort_alpha":
 		sortedJobs = sortAlpha(jobsArray)
 		return res.status(200).send({ message: "success", jobs: sortedJobs })
 	case "sort_ascending":
-		sortedJobs = sortSalary("ascending", jobsArray)
+		sortedJobs = sortSalary("sort_ascending", jobsArray)
 		return res.status(200).send({ message: "success", jobs: sortedJobs })
 	case "sort_decsending":
-		sortedJobs = sortSalary("descending", jobsArray)
+		sortedJobs = sortSalary("sort_decsending", jobsArray)
 		return res.status(200).send({ message: "success", jobs: sortedJobs })
 	default:
 		return res.status(200).send({ message: "success", jobs: jobsArray})
