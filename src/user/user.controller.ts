@@ -2,7 +2,7 @@
 import db from "../db/connection"
 import { Request, Response } from "express"
 import { ROW_TYPE, UserStateInterface, USER_TABLE_TYPE } from "./user.model"
-import bcrypt from "bcrypt"
+import bcryptjs from "bcryptjs"
 
 
 // THIS WORKS
@@ -11,9 +11,6 @@ const addUser = async (req: Request, res: Response) => {
 	try {
 		const sql_insert = "INSERT INTO users(first_name, last_name, email, password, saved_jobs) VALUES(?,?,?,?,?)"
 		const { first_name, last_name, email, password } =  req.body
-
-		const salt = bcrypt.genSaltSync(10)
-		const hashedPassword = bcrypt.hashSync(password, salt)
 		
 		const savedJobs = {
 			columnOrder: ["column-0"],
@@ -34,7 +31,7 @@ const addUser = async (req: Request, res: Response) => {
 			}
 		} 
 
-		db.run(sql_insert,[first_name, last_name, email, hashedPassword, JSON.stringify(savedJobs)], (err: any) => {
+		db.run(sql_insert,[first_name, last_name, email, password, JSON.stringify(savedJobs)], (err: any) => {
 			if (err) return console.error(err)
 			console.log("a new row has been created")
 		})
@@ -75,7 +72,7 @@ const login = async (req: Request, res: Response) => {
 			if (err) return console.error(err)
 			
 			if (!rows.length) return res.status(401).send(false)
-			if (!bcrypt.compare(password, rows[0].password)) return res.status(401).send(false)
+			if (!bcryptjs.compare(password, rows[0].password)) return res.status(401).send(false)
 			
 			const {first_name, last_name, email, saved_jobs } = rows[0]
 
