@@ -2,6 +2,7 @@
 import db from "../db/connection"
 import { Request, Response } from "express"
 import { ROW_TYPE, UserStateInterface, USER_TABLE_TYPE } from "./user.model"
+import bcrypt from "bcrypt"
 
 
 // THIS WORKS
@@ -69,11 +70,12 @@ const login = async (req: Request, res: Response) => {
         
 		db.all(sql_find, [email, password], (err: any, rows: Array<ROW_TYPE>) => {
 			if (err) return console.error(err)
-			console.log(JSON.stringify(rows))
+			
 			if (!rows.length) return res.status(401).send(false)
+			if (!bcrypt.compare(password, rows[0].password)) return res.status(401).send(false)
+			
 			const {first_name, last_name, email, saved_jobs } = rows[0]
 
-			
 			const state: UserStateInterface = {
 				isLoggedIn: true,
 				user: {
