@@ -11,6 +11,9 @@ const addUser = async (req: Request, res: Response) => {
 	try {
 		const sql_insert = "INSERT INTO users(first_name, last_name, email, password, saved_jobs) VALUES(?,?,?,?,?)"
 		const { first_name, last_name, email, password } =  req.body
+
+		const salt = bcrypt.genSaltSync(10)
+		const hashedPassword = bcrypt.hashSync(password, salt)
 		
 		const savedJobs = {
 			columnOrder: ["column-0"],
@@ -31,7 +34,7 @@ const addUser = async (req: Request, res: Response) => {
 			}
 		} 
 
-		db.run(sql_insert,[first_name, last_name, email, password, JSON.stringify(savedJobs)], (err: any) => {
+		db.run(sql_insert,[first_name, last_name, email, hashedPassword, JSON.stringify(savedJobs)], (err: any) => {
 			if (err) return console.error(err)
 			console.log("a new row has been created")
 		})
